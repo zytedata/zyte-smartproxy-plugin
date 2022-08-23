@@ -1,0 +1,17 @@
+{
+    "name": "zyte-smartproxy-plugin",
+    "version": "1.0.1",
+    "description": "A playwright-extra and puppeteer-extra enhancement with zyte smart proxy manager services",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": ["playwright", "puppeteer", "playwright-extra", "puppeteer-extra", "zyte", "smart", "proxy", "manager"],
+    "author": "Zyte Group Ltd.",
+    "license": "MIT",
+    "dependencies": {
+      "cross-fetch": "^3.1.4",
+      "puppeteer-extra-plugin": "^3.2.2"
+    },
+    "homepage": "https://github.com/zytedata/zyte-smartproxy-plugin"
+  }
