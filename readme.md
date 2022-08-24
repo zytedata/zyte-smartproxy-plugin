@@ -112,10 +112,15 @@ node sample.js
 | `static_bypass_regex` | `/.*?\.(?:txt\|json\|css\|less\|gif\|ico\|jpe?g\|svg\|png\|webp\|mkv\|mp4\|mpe?g\|webm\|eot\|ttf\|woff2?)$/` | Regex to use filtering URLs for `static_bypass`. |
 | `headers` | `{'X-Crawlera-No-Bancheck': '1', 'X-Crawlera-Profile': 'pass', 'X-Crawlera-Cookies': 'disable'}` | List of headers to be appended to requests |
 
-### Notes
-Some websites may not work with AdBlocker or `static_bypass` enabled (default). Try to disable them if you encounter any issues.
+## Notes
+- Some websites may not work with AdBlocker or `static_bypass` enabled (default). Try to disable them if you encounter any issues.
 
-When using the `headless: true` mode, values generated for some browser-specific headers are a bit different, which may be detected by websites. Try using ['X-Crawlera-Profile': 'desktop'](https://docs.zyte.com/smart-proxy-manager.html#x-crawlera-profile) in that case:
+- When using `headless: true` mode, values generated for some browser-specific headers are a bit different, which may be detected by websites. Try using ['X-Crawlera-Profile': 'desktop'](https://docs.zyte.com/smart-proxy-manager.html#x-crawlera-profile) in that case:
 ``` javascript
 puppeteer.use(SmartProxyPlugin({spm_apikey: '<SPM_APIKEY>', headers: {'X-Crawlera-No-Bancheck': '1', 'X-Crawlera-Profile': 'desktop', 'X-Crawlera-Cookies': 'disable'}}));
+```
+
+- When connecting to a remote Chrome browser instance, it should be launched with these arguments:
+```
+--proxy-server=http://proxy.zyte.com:8011 --disable-site-isolation-trials
 ```
