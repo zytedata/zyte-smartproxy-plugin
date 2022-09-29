@@ -45,6 +45,10 @@ class Plugin extends PuppeteerExtraPlugin {
     // without this argument Chromium requests from embedded iframes are not intercepted in CDP session
     // https://bugs.chromium.org/p/chromium/issues/detail?id=924937#c10
     options.args.push(`--disable-site-isolation-trials`);
+
+    if (options.spm_session_id) {
+      this.spmSessionId = options.spm_session_id;
+    }
   }
 
   async onPageCreated(page) {
