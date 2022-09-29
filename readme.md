@@ -111,6 +111,8 @@ node sample.js
 | `static_bypass` | `true` | When `true` Zyte SmartProxy Plugin will skip proxy use (saves proxy bandwidth) for static assets defined by `static_bypass_regex` or pass `false` to use proxy. |
 | `static_bypass_regex` | `/.*?\.(?:txt\|json\|css\|less\|gif\|ico\|jpe?g\|svg\|png\|webp\|mkv\|mp4\|mpe?g\|webm\|eot\|ttf\|woff2?)$/` | Regex to use filtering URLs for `static_bypass`. |
 | `headers` | `{'X-Crawlera-No-Bancheck': '1', 'X-Crawlera-Profile': 'pass', 'X-Crawlera-Cookies': 'disable'}` | List of headers to be appended to requests |
+| `spm_session_id` | `undefined` | When specified Zyte SmartProxy Plugin will use an existing Zyte Smart Proxy Manager [session](https://docs.zyte.com/smart-proxy-manager/sessions.html), otherwise a new session will be created. |
+
 
 ## Notes
 - Some websites may not work with AdBlocker or `static_bypass` enabled (default). Try to disable them if you encounter any issues.

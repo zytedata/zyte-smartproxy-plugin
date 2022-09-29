@@ -28,6 +28,7 @@ class Plugin extends PuppeteerExtraPlugin {
     this.staticBypassRegex = this.opts.static_bypass_regex || defaultStaticBypassRegex;
     this.headers =  this.opts.headers || defaultHeaders;
     this.xCrawleraClient = `zyte-smartproxy-${this.framework}-extra/${version}`;
+    this.spmSessionId = this.opts.spm_session_id;
   }
 
   async beforeLaunch (options) {
