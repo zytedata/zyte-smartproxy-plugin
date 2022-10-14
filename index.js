@@ -120,8 +120,7 @@ class Plugin extends PuppeteerExtraPlugin {
   }
 
   _isStaticContent(event) {
-    return ['GET', 'OPTIONS'].includes(event.request.method) &&
-      this.staticBypassRegex.test(event.request.url)
+    return this.staticBypassRegex.test(event.request.url);
   }
 
   async _bypassRequest(cdpSession, event, page) {
@@ -244,8 +243,7 @@ class Plugin extends PuppeteerExtraPlugin {
   }
 
   _routeIsStaticContent(request) {
-    return ['GET', 'OPTIONS'].includes(request.method()) &&
-      this.staticBypassRegex.test(request.url());
+    return this.staticBypassRegex.test(request.url());
   }
 
   async _routeBypassRequest(route, request) {
