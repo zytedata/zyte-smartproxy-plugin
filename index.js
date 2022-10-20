@@ -163,7 +163,7 @@ class Plugin extends PuppeteerExtraPlugin {
 
     const headers = event.request.headers;
     if (this.spmSessionId === undefined) {
-      this.spmSessionId = await this._createSPMSession();
+      await this._createNewSPMSession();
     }
 
     headers['X-Crawlera-Session'] = this.spmSessionId;
@@ -176,6 +176,10 @@ class Plugin extends PuppeteerExtraPlugin {
         headers: headersArray(newHeaders)
       });
     }
+  }
+
+  async _createNewSPMSession() {
+    this.spmSessionId = await this._createSPMSession();
   }
 
   async _createSPMSession() {
@@ -280,7 +284,7 @@ class Plugin extends PuppeteerExtraPlugin {
     }
 
     if (this.spmSessionId === undefined) {
-      this.spmSessionId = await this._createSPMSession();
+      await this._createNewSPMSession();
     }
 
     headers['X-Crawlera-Session'] = this.spmSessionId;
