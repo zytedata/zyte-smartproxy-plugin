@@ -80,22 +80,22 @@ class Plugin extends PuppeteerExtraPlugin {
     cdpSession.on('Fetch.requestPaused', async (event) => {
       if (this._isResponse(event)) {
         this._verifyResponseSessionId(event.responseHeaders);
-        await this._continueResponse(cdpSession, event, page);
+        await this._continueResponse(cdpSession, event);
       } else {
         if (this.staticBypass && this._isStaticContent(event)) {
           try {
-            await this._bypassRequest(cdpSession, event, page);
+            await this._bypassRequest(cdpSession, event);
           } catch(err) {
-            await this._continueRequest(cdpSession, event, page);
+            await this._continueRequest(cdpSession, event);
           }
         } else {
-          await this._continueRequest(cdpSession, event, page);
+          await this._continueRequest(cdpSession, event);
         }
       }
     });
 
     cdpSession.on('Fetch.authRequired', async (event) => {
-      await this._respondToAuthChallenge(cdpSession, event, page);
+      await this._respondToAuthChallenge(cdpSession, event);
     });
   }
 
@@ -113,17 +113,17 @@ class Plugin extends PuppeteerExtraPlugin {
     }
   }
 
-  async _continueResponse(cdpSession, event, page) {
-    if (!page.isClosed()) {
+  async _continueResponse(cdpSession, event) {
+    try {
       await cdpSession.send('Fetch.continueRequest', {requestId: event.requestId});
-    }
+    } catch(err) {}
   }
 
   _isStaticContent(event) {
     return this.staticBypassRegex.test(event.request.url);
   }
 
-  async _bypassRequest(cdpSession, event, page) {
+  async _bypassRequest(cdpSession, event) {
     const headers = event.request.headers;
     const response = await fetch(event.request.url, {headers})
 
@@ -135,21 +135,21 @@ class Plugin extends PuppeteerExtraPlugin {
           response_headers.push({name: pair[0], value: pair[1] + ''});
         }
       }
-        
-      if (!page.isClosed()) {
+
+      try {
         await cdpSession.send('Fetch.fulfillRequest', {
           requestId: event.requestId,
           responseCode: response.status,
           responseHeaders: response_headers,
           body: response_body,
         });
-      }
+      } catch(err) {}
     } else {
       throw 'Proxy bypass failed';
     }
   }
 
-  async _continueRequest(cdpSession, event, page) {
+  async _continueRequest(cdpSession, event) {
     function headersArray(headers) {
       const result = [];
       for (const name in headers) {
@@ -170,12 +170,12 @@ class Plugin extends PuppeteerExtraPlugin {
     headers['X-Crawlera-Client'] = this.xCrawleraClient;
     const newHeaders = {...headers, ...this.headers}
 
-    if (!page.isClosed()) {
+    try {
       await cdpSession.send('Fetch.continueRequest', {
         requestId: event.requestId,
         headers: headersArray(newHeaders)
       });
-    }
+    } catch(err) {}
   }
 
   async _createNewSPMSession() {
@@ -205,7 +205,7 @@ class Plugin extends PuppeteerExtraPlugin {
   }
 
 
-  async _respondToAuthChallenge(cdpSession, event, page) {
+  async _respondToAuthChallenge(cdpSession, event) {
     const parameters = {requestId: event.requestId}
 
     if (this._isSPMAuthChallenge(event)) {
@@ -217,10 +217,10 @@ class Plugin extends PuppeteerExtraPlugin {
     } else {
       parameters.authChallengeResponse = {response: 'Default'};
     }
-    
-    if (!page.isClosed()) {
+  
+    try {
       await cdpSession.send('Fetch.continueWithAuth', parameters);
-    }
+    } catch(err) {}
   }
 
   _isSPMAuthChallenge(event) {
