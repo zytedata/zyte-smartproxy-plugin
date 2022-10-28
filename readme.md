@@ -22,7 +22,10 @@ const { chromium } = require('playwright-extra')
 
 // add zyte-smartproxy-plugin
 const SmartProxyPlugin = require('zyte-smartproxy-plugin');
-chromium.use(SmartProxyPlugin({spm_apikey: '<SPM_APIKEY>'}));
+chromium.use(SmartProxyPlugin({
+  spm_apikey: '<SPM_APIKEY>',
+  static_bypass: false, //  enable to save bandwidth (but may break some websites)
+}));
 
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
@@ -38,7 +41,9 @@ const fetch = require('cross-fetch');
 
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage({ignoreHTTPSErrors: true});
-  adBlocker.enableBlockingInPage(page);
+
+  // uncomment to enable adBlocker (saves bandwidth but may break some websites)
+  // adBlocker.enableBlockingInPage(page);
 
   await page.goto('https://toscrape.com', {timeout: 180000});
 
@@ -72,15 +77,18 @@ const puppeteer = require('puppeteer-extra')
 
 // add zyte-smartproxy-plugin
 const SmartProxyPlugin = require('zyte-smartproxy-plugin');
-puppeteer.use(SmartProxyPlugin({spm_apikey: '<SPM_APIKEY>'}));
+puppeteer.use(SmartProxyPlugin({
+  spm_apikey: '<SPM_APIKEY>',
+  static_bypass: false, //  enable to save bandwidth (but may break some websites)
+}));
 
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 
-// add adblocker plugin to block all ads (saves bandwidth)
-const AdBlockerPlugin = require('puppeteer-extra-plugin-adblocker');
-puppeteer.use(AdBlockerPlugin({blockTrackers: true}));
+// uncomment to enable adblocker plugin (saves bandwidth but may break some websites)
+// const AdBlockerPlugin = require('puppeteer-extra-plugin-adblocker');
+// puppeteer.use(AdBlockerPlugin({blockTrackers: true}));
 
 // puppeteer usage as normal
 (async () => {
